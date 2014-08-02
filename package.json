@@ -1,0 +1,17 @@
+{
+  "name": "ISSoverTT",
+  "version": "0.0.0",
+  "description": "Tweets when the ISS will be over T&T.",
+  "main": "ISSoverTT.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Keelan Chu For",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.7.2",
+    "moment": "^2.8.1",
+    "request": "^2.39.0",
+    "twit": "^1.1.18"
+  }
+}
