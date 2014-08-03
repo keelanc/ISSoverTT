@@ -1,3 +1,5 @@
+// ISSoverTT.js
+
 /*var http = require('http'); //add the http module
 var express = require('express');
 var app = express();
@@ -23,8 +25,9 @@ app.get('/', function(req, res) {
     res.send('Hello Express');
 }); //routing
 
-app.listen(3000, function() {
-    console.log('Listening on port 3000');
+var port = Number(process.env.PORT || 5000);
+app.listen(port, function() {
+    console.log("Listening on " + port);
 });
 /*
 // twitter app info
