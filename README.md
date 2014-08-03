@@ -2,7 +2,7 @@ ISSoverTT
 ===============
 _by Keelan Chu For_
 
-A twitterbot.
+A twitterbot. Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
 
 Requires [node](http://nodejs.org/). You also need a Twitter App access token, consumer key, and associated secrets: https://dev.twitter.com/apps/new
 

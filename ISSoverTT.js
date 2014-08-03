@@ -1,22 +1,8 @@
 // ISSoverTT.js
 
-/*var http = require('http'); //add the http module
-var express = require('express');
-var app = express();
-var myServer = http.createServer(function(request, response) {
-    response.writeHead(200, {"Content-Type" : "text/plain"});
-    response.write("Hello");
-    response.end();
-}); //create a server
-
-myServer.listen(3000); //listen on port 3000
-console.log("Go to http:localhost:3000 on your browswer");
-console.log("Ctrl+C to quit");
-*/
-
 var moment = require('moment');
 var request = require('request');
-//var Twit = require('twit');
+var Twit = require('twit');
 // does Heroku require a response to http requests?
 var express = require('express');
 var app = express();
@@ -25,25 +11,14 @@ var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
     console.log("Listening on " + port);
 });
-/*
-// twitter app info
-var T = new Twit({
-     consumer_key:          '',
-     consumer_secret:       '',
-     access_token:          '',
-     access_token_secret:   ''
-});
-
-var statement = 'testing';
-T.post('statuses/update', { status: statement}, function(err, reply) {
-       console.log("error: " + err);
-       console.log("reply: " + reply);
-       });
-*/
 
 var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&n=1&callback=';
 var message = '';
+var soon = false;
+var longtweet;
+var tweetintset = false;
 
+// tweet every 5 hours until less than 15 minutes then tweet once
 (function whenISS () {
     request({
         url: url,
@@ -54,16 +29,50 @@ var message = '';
             var date = body.response[0].risetime;
             //console.log(date)
             //console.log(moment.unix(date).toDate());
-            message =
-                'The ISS will be over T&T ' +
-                moment.unix(date).fromNow() +
-                ' (' + moment.unix(date).zone('-04:00').format('h:mm a') +
-                ' EDT)';
-            console.log(message);
+            var then = moment.unix(date);
+            var now = moment();
+            if (!soon && Number(then.diff(now, 'minutes')) < 15) {
+                clearInterval(longtweet);
+                tweetintset = false;
+                soon = true; // avoid tweeting more than once while <15
+                message =
+                    'The ISS will be over T&T ' +
+                    then.fromNow() + '!';
+                tweetit();
+            } else if (Number(then.diff(now, 'minutes')) >= 15) {
+                soon = false;
+                message =
+                    'The ISS will be over T&T ' +
+                    then.fromNow() +
+                    ' (' + then.zone('-04:00').format('h:mm a') +
+                    ' EDT)';
+                if (!tweetintset) {
+                    tweetit();
+                    longtweet = setInterval(tweetit, 5*60*60000);
+                    tweetintset = true;
+                }
+            }
         }
     });
-    setTimeout(whenISS, 5000);
- })();
+    setTimeout(whenISS, 5000); // check ISS every 5 minutes
+})();
+
+// twitter app info
+var T = new Twit({
+     consumer_key:          process.env.TWIT_KEY,
+     consumer_secret:       process.env.TWIT_SECRET,
+     access_token:          process.env.TWIT_TOKEN,
+     access_token_secret:   process.env.TWIT_TOKENSECRET
+ });
+
+function tweetit() {
+    console.log(message);
+    
+    T.post('statuses/update', { status: message }, function(err, data, response) {
+        //console.log(data)
+           console.log("error: " + err)
+    })
+}
 
 app.get('/', function(req, res) {
         res.send(
