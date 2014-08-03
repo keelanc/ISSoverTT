@@ -7,9 +7,9 @@ A twitterbot. Tweets when the International Space Station will be above Trinidad
 I host the bot on [Heroku](https://dashboard.heroku.com/home). You can see it working [here](http://issovertt.herokuapp.com/).
 
 Requires [node](http://nodejs.org/). You also need a Twitter App access token, key, etc: https://dev.twitter.com/apps/new
-See (this)[https://devcenter.heroku.com/articles/config-vars] for help passing the Twitter API stuff to Heroku.
+See [this](https://devcenter.heroku.com/articles/config-vars) for help passing the Twitter API stuff to Heroku.
 
-To install dependencies and run:
+To install dependencies and run script:
 
 > npm install
 
