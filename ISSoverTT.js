@@ -21,10 +21,6 @@ var request = require('request');
 var express = require('express');
 var app = express();
 
-app.get('/', function(req, res) {
-    res.send('Hello Express');
-}); //routing
-
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
     console.log("Listening on " + port);
@@ -46,6 +42,7 @@ T.post('statuses/update', { status: statement}, function(err, reply) {
 */
 
 var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&n=1&callback=';
+var message = '';
 
 (function whenISS () {
     request({
@@ -57,14 +54,21 @@ var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&
             var date = body.response[0].risetime;
             //console.log(date)
             //console.log(moment.unix(date).toDate());
-            console.log(
-                'The ISS will be over T&T',
-                moment.unix(date).fromNow(),
-                '(' + moment.unix(date).zone('-04:00').format('h:mm a'),
-                'EDT)'
-            );
+            message =
+                'The ISS will be over T&T ' +
+                moment.unix(date).fromNow() +
+                ' (' + moment.unix(date).zone('-04:00').format('h:mm a') +
+                ' EDT)';
+            console.log(message);
         }
     });
     setTimeout(whenISS, 5000);
  })();
+
+app.get('/', function(req, res) {
+        res.send(
+                 '<p>Hello World</p>' +
+                 message
+                 );
+        }); //routing
 
