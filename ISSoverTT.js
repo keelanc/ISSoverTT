@@ -18,6 +18,7 @@ var request = require('request');
 // does Heroku require a response to http requests?
 var express = require('express');
 var app = express();
+
 app.get('/', function(req, res) {
     res.send('Hello Express');
 }); //routing
@@ -40,7 +41,7 @@ T.post('statuses/update', { status: statement}, function(err, reply) {
        console.log("reply: " + reply);
        });
 */
-
+/*
 var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&n=1&callback=';
 
 (function whenISS () {
@@ -63,4 +64,4 @@ var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&
     });
     setTimeout(whenISS, 5000);
  })();
-
+*/
