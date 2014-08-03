@@ -44,7 +44,7 @@ T.post('statuses/update', { status: statement}, function(err, reply) {
        console.log("reply: " + reply);
        });
 */
-/*
+
 var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&n=1&callback=';
 
 (function whenISS () {
@@ -67,4 +67,4 @@ var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&
     });
     setTimeout(whenISS, 5000);
  })();
-*/
+
