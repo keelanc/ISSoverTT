@@ -2,11 +2,11 @@ ISSoverTT
 ===============
 _by Keelan Chu For_
 
-A twitterbot. Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
+A twitterbot ([@issovertt](https://twitter.com/issovertt)). Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
 
 I host the bot on [Heroku](https://dashboard.heroku.com/home). You can see it working [here](http://issovertt.herokuapp.com/).
 
-Requires [node](http://nodejs.org/). You also need a Twitter App access token, key, etc: https://dev.twitter.com/apps/new
+Requires [node](http://nodejs.org/). You also need a Twitter App access token, key, etc (<https://dev.twitter.com/apps/new>).
 See [this](https://devcenter.heroku.com/articles/config-vars) for help passing the Twitter API stuff to Heroku.
 
 To install dependencies and run script:
@@ -15,6 +15,7 @@ To install dependencies and run script:
 
 > node ISSoverTT.js
     
+Enjoy!
 <br />    
     
 ## Licence
