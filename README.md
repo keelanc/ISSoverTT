@@ -2,7 +2,7 @@ ISSoverTT
 ===============
 _by Keelan Chu For_
 
-A twitterbot ([@issovertt](https://twitter.com/issovertt)). Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
+A twitterbot ([@ISSoverTT](https://twitter.com/issovertt)). Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
 
 I host the bot on [Heroku](https://dashboard.heroku.com/home). You can see it working [here](http://issovertt.herokuapp.com/).
 
@@ -11,9 +11,8 @@ See [this](https://devcenter.heroku.com/articles/config-vars) for help passing t
 
 To install dependencies and run script:
 
-> npm install
-
-> node ISSoverTT.js
+    $ npm install
+    $ node ISSoverTT.js
     
 Enjoy!
 <br />    

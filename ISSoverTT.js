@@ -3,7 +3,7 @@
 var moment = require('moment');
 var request = require('request');
 var Twit = require('twit');
-// does Heroku require a response to http requests?
+var twitter_update_with_media = require('./twitter_update_with_media');
 var express = require('express');
 var app = express();
 
@@ -14,9 +14,30 @@ app.listen(port, function() {
 
 var url = 'http://api.open-notify.org/iss-pass.json?lat=10.67&lon=-61.52&alt=25&n=1&callback=';
 var message = '';
-var soon = false;
-var longtweet;
-var tweetintset = false;
+var soon = false;       // is it <15 mins?
+var longtweet;          // interval timer for 1tweet/5hrs
+var tweetintset = false;// avoid multiple setInterval's
+var mexact;             // time the ISS will be directly overhead
+
+
+// twitter app info
+var T = new Twit({
+    consumer_key:          process.env.TWIT_KEY,
+    consumer_secret:       process.env.TWIT_SECRET,
+    access_token:          process.env.TWIT_TOKEN,
+    access_token_secret:   process.env.TWIT_TOKENSECRET
+});
+
+var tuwm = new twitter_update_with_media({
+    consumer_key:       process.env.TWIT_KEY,
+    consumer_secret:    process.env.TWIT_SECRET,
+    token:              process.env.TWIT_TOKEN,
+    token_secret:       process.env.TWIT_TOKENSECRET
+});
+
+ISSimage = 'http://api.snapito.io/v2/webshot/' +
+            process.env.SNAPITO_KEY + '?size=sc&freshness=hour&url=' +
+            'http%3A%2F%2Fwww.ustream.tv%2Fembed%2F17074538%3Fautoplay%3Dtrue';
 
 // tweet every 5 hours until less than 15 minutes then tweet once
 (function whenISS () {
@@ -27,24 +48,33 @@ var tweetintset = false;
         if(!error && response.statusCode == 200) {
             //console.log(body) // print the json response
             var date = body.response[0].risetime;
+            var duration = body.response[0].duration;
             //console.log(date)
             //console.log(moment.unix(date).toDate());
-            var then = moment.unix(date);
-            var now = moment();
-            if (!soon && Number(then.diff(now, 'minutes')) < 15) {
+            var mthen = moment.unix(date);   // time ISS is predicted to be above T&T
+            var mnow = moment();             // time now
+            mexact = mthen.clone();
+            mexact.add(duration/2, 'seconds');
+            if ( Number(mexact.diff(mnow, 'minutes')) < 5 ) {
+                message =
+                    'The #ISS should be directly overhead #Trinidad';
+                tweetwithmedia();
+            }
+            else if (!soon && Number(mthen.diff(mnow, 'minutes')) < 15) {
                 clearInterval(longtweet);
                 tweetintset = false;
                 soon = true; // avoid tweeting more than once while <15
                 message =
-                    'The ISS will be over T&T ' +
-                    then.fromNow() + '!';
+                    'The #ISS will be over #Trinidad ' +
+                    mthen.fromNow() + '!';
                 tweetit();
-            } else if (Number(then.diff(now, 'minutes')) >= 15) {
+            }
+            else if (Number(mthen.diff(mnow, 'minutes')) >= 15) {
                 soon = false;
                 message =
-                    'The ISS will be over T&T ' +
-                    then.fromNow() +
-                    ' (' + then.zone('-04:00').format('h:mm a') +
+                    'The #ISS will be over #Trinidad ' +
+                    mthen.fromNow() +
+                    ' (' + mthen.zone('-04:00').format('h:mm a') +
                     ' EDT)';
                 if (!tweetintset) {
                     tweetit();
@@ -57,27 +87,32 @@ var tweetintset = false;
     setTimeout(whenISS, 5000); // check ISS every 5 minutes
 })();
 
-// twitter app info
-var T = new Twit({
-     consumer_key:          process.env.TWIT_KEY,
-     consumer_secret:       process.env.TWIT_SECRET,
-     access_token:          process.env.TWIT_TOKEN,
-     access_token_secret:   process.env.TWIT_TOKENSECRET
- });
 
 function tweetit() {
     console.log(message);
     
     T.post('statuses/update', { status: message }, function(err, data, response) {
         //console.log(data)
-           console.log("error: " + err)
+        console.log("error: " + err)
     })
+}
+
+function tweetwithmedia() {
+    tuwm.post(message, ISSimage, function(err, response) {
+        if (err) {
+            console.log(err);
+        }
+        //console.log(response);
+    });
 }
 
 app.get('/', function(req, res) {
         res.send(
-                 '<p>Hello World</p>' +
-                 message
+                 '<a href="https://twitter.com/issovertt">@ISSoverTT</a><br/>' +
+                 message /*+
+                 '<br/><img src="' + ISSimage + '">' +
+                 '<br/><p>' + mexact.zone('-04:00').format('h:mm a') + '</p>'
+//                 '<br/><p>' + duration + '</p>'*/
                  );
         }); //routing
 
