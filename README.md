@@ -2,14 +2,14 @@ ISSoverTT
 ===============
 _by Keelan Chu For_
 
-A twitterbot ([@ISSoverTT](https://twitter.com/issovertt)). Tweets when the International Space Station will be above Trinidad & Tobago. Uses [Open Notify](http://open-notify.org/) for predictions.
+A twitterbot ([@ISSoverTT](https://twitter.com/issovertt)). Tweets when the International Space Station will be above Trinidad & Tobago and includes an image from the ISS when directly overhead. Uses [Open Notify](http://open-notify.org/) for predictions, and [ISS HD Earth Viewing Experiment](http://www.ustream.tv/channel/iss-hdev-payload) with the [Snapito API](http://snapito.io/) for images.
 
 I host the bot on [Heroku](https://dashboard.heroku.com/home). You can see it working [here](http://issovertt.herokuapp.com/).
 
-Requires [node](http://nodejs.org/). You also need a Twitter App access token, key, etc (<https://dev.twitter.com/apps/new>).
-See [this](https://devcenter.heroku.com/articles/config-vars) for help passing the Twitter API stuff to Heroku.
+Requires [node](http://nodejs.org/). You also need a Twitter and Snapito API credentials (<https://dev.twitter.com/apps/new>).
+See <https://devcenter.heroku.com/articles/config-vars> for help passing the API keys to Heroku.
 
-To install dependencies and run script:
+To install dependencies and run script locally:
 
     $ npm install
     $ node ISSoverTT.js
