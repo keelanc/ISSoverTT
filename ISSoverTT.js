@@ -110,13 +110,17 @@ function tweetwithmedia() {
         //console.log(response);
     });
 }
-
+var mstart = moment({hour: 20}); // 8pm (defaults to today)
+var mend = mstart.clone().add(10, 'hours'); // 6am next day
 app.get('/', function(req, res) {
         res.send(
                  '<a href="https://twitter.com/issovertt">@ISSoverTT</a><br/>' +
                  message +
-                 moment({hour: 8}).format('dddd, h:mm a') +
-                 moment({hour: 18}).format('dddd, h:mm a')
+//                 mstart.format('dddd, h:mm a') + mend.format('dddd, h:mm a')
+                 moment({hour: 20}).format('dddd, h:mm a') +
+                 moment({hour: 24}).format('dddd, h:mm a') +
+                 moment({hour: 0}).format('dddd, h:mm a') +
+                 moment({hour: 6}).format('dddd, h:mm a')
 /*+
                  '<br/><img src="' + ISSimage + '">' +
                  '<br/><p>' + mexact.zone('-04:00').format('h:mm a') + '</p>'
