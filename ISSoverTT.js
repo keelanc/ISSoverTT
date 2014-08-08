@@ -55,7 +55,8 @@ ISSimage = 'http://api.snapito.io/v2/webshot/' +
             var mnow = moment();            // time now
             var mexact = mthen.clone();     // time the ISS will be directly overhead
             mexact.add(duration/2, 'seconds');
-            if ( !mnow && Number(mexact.diff(mnow, 'minutes')) < 5 ) {
+            if ( !mnow && Number(mexact.diff(mnow, 'minutes')) < 5 &&
+                 moment({hour: 6}) <= mnow && mnow < moment({hour: 20}) ) { // 6am-8pm
                 clearInterval(longtweet);   // Should be already done in the '<15' case
                 tweetintset = false;        // but repeated here incase the Heroku dyno
                                             // is down and the '<15' case is missed.
@@ -110,19 +111,11 @@ function tweetwithmedia() {
         //console.log(response);
     });
 }
-var mstart = moment({hour: 20}); // 8pm (defaults to today)
-var mend = mstart.clone().add(10, 'hours'); // 6am next day
+
 app.get('/', function(req, res) {
         res.send(
                  '<a href="https://twitter.com/issovertt">@ISSoverTT</a><br/>' +
-                 message +
-//                 mstart.format('dddd, h:mm a') + mend.format('dddd, h:mm a')
-                 moment({hour: 20}).format(' dddd, h:mm a ') +
-                 moment().endOf('day').format(' dddd, h:mm a ') +
-//                 moment({hour: 0}).format(' dddd, h:mm a ') +
-                 moment().startOf('day').format(' dddd, h:mm a ') +
-                 moment({hour: 6}).format(' dddd, h:mm a ')
-/*+
+                 message /*+
                  '<br/><img src="' + ISSimage + '">' +
                  '<br/><p>' + mexact.zone('-04:00').format('h:mm a') + '</p>'
 //                 '<br/><p>' + duration + '</p>'*/
