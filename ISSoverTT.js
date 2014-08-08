@@ -117,10 +117,11 @@ app.get('/', function(req, res) {
                  '<a href="https://twitter.com/issovertt">@ISSoverTT</a><br/>' +
                  message +
 //                 mstart.format('dddd, h:mm a') + mend.format('dddd, h:mm a')
-                 moment({hour: 20}).format('dddd, h:mm a') +
-                 moment({hour: 24}).format('dddd, h:mm a') +
-                 moment({hour: 0}).format('dddd, h:mm a') +
-                 moment({hour: 6}).format('dddd, h:mm a')
+                 moment({hour: 20}).format(' dddd, h:mm a ') +
+                 moment().endOf('day').format(' dddd, h:mm a ') +
+//                 moment({hour: 0}).format(' dddd, h:mm a ') +
+                 moment().startOf('day').format(' dddd, h:mm a ') +
+                 moment({hour: 6}).format(' dddd, h:mm a ')
 /*+
                  '<br/><img src="' + ISSimage + '">' +
                  '<br/><p>' + mexact.zone('-04:00').format('h:mm a') + '</p>'
